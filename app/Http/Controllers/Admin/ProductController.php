@@ -101,6 +101,10 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::withTrashed()->with(['specs', 'images'])->findOrFail($id);
+        
+        // Remove duplicate images that have the same image_url so they don't appear in the edit screen
+        $product->setRelation('images', $product->images->unique('image_url')->values());
+        
         $categories = Category::all();
         $brands = Brand::all();
         return view('admin.products.edit', compact('product', 'categories', 'brands'));
@@ -137,14 +141,7 @@ class ProductController extends Controller
             }
         }
 
-        if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
-            $product->image = $request->file('image')->store('products', 'public');
-        }
-
-        $product->update([
+        $data = [
             'name' => $request->name,
             'slug' => $slug,
             'category_id' => $request->category_id,
@@ -153,7 +150,21 @@ class ProductController extends Controller
             'stock' => $request->stock,
             'description' => $request->description,
             'status' => $request->has('status'),
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $data['image'] = $request->file('image')->store('products', 'public');
+        } elseif ($request->boolean('remove_main_image')) {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $data['image'] = null;
+        }
+
+        $product->update($data);
 
         $product->specs()->updateOrCreate(
             ['product_id' => $product->id],
@@ -165,6 +176,23 @@ class ProductController extends Controller
                 'glass_type' => $request->glass_type,
             ]
         );
+
+        // Handle deletions of existing gallery images
+        if ($request->has('delete_gallery_images')) {
+            $imagesToDelete = ProductImage::whereIn('id', $request->delete_gallery_images)
+                                        ->where('product_id', $product->id)
+                                        ->get();
+                                        
+            foreach ($imagesToDelete as $image) {
+                if ($image->image_url) {
+                    // Check if other records rely on the same file before deleting it from storage
+                    if (ProductImage::where('image_url', $image->image_url)->where('id', '!=', $image->id)->doesntExist()) {
+                        Storage::disk('public')->delete($image->image_url);
+                    }
+                }
+                $image->delete();
+            }
+        }
 
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $file) {
@@ -198,5 +226,23 @@ class ProductController extends Controller
         $product = Product::withTrashed()->findOrFail($id);
         $product->update(['status' => !$product->status]);
         return back()->with('success', 'Product status updated.');
+    }
+
+    public function destroyImage(Request $request, $id)
+    {
+        $image = ProductImage::findOrFail($id);
+        if ($image->image_url) {
+            // Check if other records rely on the same file before deleting it from storage
+            if (ProductImage::where('image_url', $image->image_url)->where('id', '!=', $image->id)->doesntExist()) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($image->image_url);
+            }
+        }
+        $image->delete();
+
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'Image deleted successfully.']);
+        }
+
+        return back()->with('success', 'Image deleted successfully.');
     }
 }

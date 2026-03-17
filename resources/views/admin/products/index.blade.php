@@ -25,7 +25,7 @@
             <thead>
                 <tr class="bg-gray-50 text-gray-700 text-sm border-b border-gray-200">
                     <th class="px-6 py-4 font-semibold w-24">Image</th>
-                    <th class="px-6 py-4 font-semibold">Product Info</th>
+                    <th class="px-6 py-4 font-semibold">Name</th>
                     <th class="px-6 py-4 font-semibold text-center">Category/Brand</th>
                     <th class="px-6 py-4 font-semibold text-right">Price</th>
                     <th class="px-6 py-4 font-semibold text-center">Stock</th>
@@ -37,7 +37,7 @@
                 @forelse($products as $product)
                 <tr class="hover:bg-gray-50 transition-colors group {{ $product->trashed() ? 'opacity-70 bg-gray-50' : '' }}">
                     <td class="px-6 py-4">
-                        <div class="w-12 h-12 rounded-lg border border-gray-200 overflow-hidden flex items-center justify-center bg-gray-50">
+                        <div class="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden border border-gray-200">
                             @if($product->image)
                                 <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                             @else
@@ -61,31 +61,32 @@
                             {{ $product->stock }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-center">
-                        @if($product->trashed())
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                Deleted
-                            </span>
-                        @else
-                            <form action="{{ route('admin.products.toggle', $product->id) }}" method="POST">
+                    <td class="px-6 py-4">
+                        <div class="flex flex-row items-center gap-2 flex-wrap justify-center">
+                            <form action="{{ route('admin.products.toggle', $product->id) }}" method="POST" class="inline-block m-0 p-0">
                                 @csrf
-                                <button type="submit" class="relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors ease-in-out duration-200 {{ $product->status ? 'bg-green-500' : 'bg-gray-200' }}">
-                                    <span class="sr-only">Toggle Status</span>
-                                    <span class="inline-block w-4 h-4 transform bg-white rounded-full transition ease-in-out duration-200 {{ $product->status ? 'translate-x-6' : 'translate-x-1' }}"></span>
+                                <button type="submit" class="focus:outline-none relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 {{ $product->status ? 'bg-indigo-600' : 'bg-gray-200' }}" title="{{ $product->status ? 'Click to disable' : 'Click to enable' }}">
+                                    <span class="sr-only">Toggle status</span>
+                                    <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform {{ $product->status ? 'translate-x-6' : 'translate-x-1' }}"></span>
                                 </button>
                             </form>
-                        @endif
+                            @if($product->trashed())
+                                <span class="inline-flex flex-row items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-red-100 text-red-800 whitespace-nowrap">
+                                    <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5"></span> Trashed
+                                </span>
+                            @endif
+                        </div>
                     </td>
                     <td class="px-6 py-4 text-right">
-                        <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <a href="{{ route('admin.products.edit', $product->id) }}" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors tooltip-trigger" title="Edit">
+                        <div class="flex items-center justify-end gap-2">
+                            <a href="{{ route('admin.products.edit', $product->id) }}" class="p-2 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors tooltip-trigger" title="Edit">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                             </a>
                             
                             @if($product->trashed())
                                 <form action="{{ route('admin.products.restore', $product->id) }}" method="POST" class="inline-block">
                                     @csrf
-                                    <button type="submit" class="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors tooltip-trigger" title="Restore">
+                                    <button type="submit" class="p-2 text-green-600 bg-green-50 hover:bg-green-100 rounded-lg transition-colors tooltip-trigger" title="Restore">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
                                     </button>
                                 </form>
@@ -93,7 +94,7 @@
                                 <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to move this product to trash?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors tooltip-trigger" title="Delete">
+                                    <button type="submit" class="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors tooltip-trigger" title="Delete">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                 </form>

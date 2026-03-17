@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\BannerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,7 +28,12 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     
     Route::post('products/{id}/restore', [ProductController::class, 'restore'])->name('products.restore');
     Route::post('products/{id}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle');
+    Route::delete('products/images/{image}', [ProductController::class, 'destroyImage'])->name('products.images.destroy');
     Route::resource('products', ProductController::class);
+
+    // Banners
+    Route::resource('banners', BannerController::class)->except(['show']);
+    Route::patch('banners/{banner}/toggle', [BannerController::class, 'toggle'])->name('banners.toggle');
 });
 
 require __DIR__.'/auth.php';

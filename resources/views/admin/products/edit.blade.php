@@ -135,32 +135,71 @@
                 <h3 class="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-3">Media</h3>
                 
                 <div class="space-y-4">
-                    <div>
+                    <div x-data="editMainImageUpload('{{ $product->image ? Storage::url($product->image) : '' }}')">
                         <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Main Image</label>
-                        @if($product->image)
-                            <div class="mb-3 w-32 h-32 rounded-lg border border-gray-200 overflow-hidden bg-gray-50 flex items-center justify-center">
-                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
-                            </div>
-                        @endif
-                        <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/jpg,image/webp" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 border border-gray-300 rounded-lg p-1.5 focus:ring-indigo-500 focus:border-indigo-500">
-                        <p class="mt-1 text-xs text-gray-500">Leave empty to keep current image. JPG, PNG, WEBP up to 2MB.</p>
+                        
+                        <!-- Existing Image / Preview -->
+                        <div x-show="preview || (existingImage && !removeExisting)" class="mb-3 rounded-lg overflow-hidden border border-gray-200 w-32 h-32 relative group" style="display: none;">
+                            <img :src="preview || existingImage" alt="Preview image" class="w-full h-full object-cover">
+                            <button type="button" @click="removeImage()" class="absolute top-1 right-1 bg-gray-700/80 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-500 focus:outline-none shadow-sm m-0 p-0 transition-colors opacity-0 group-hover:opacity-100">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                        
+                        <input type="hidden" name="remove_main_image" :value="removeExisting ? '1' : '0'">
+
+                        <div x-show="!preview && (!existingImage || removeExisting)">
+                            <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/jpg,image/webp" @change="handleFileChange" x-ref="fileInput" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 border border-gray-300 rounded-lg p-1.5 focus:ring-indigo-500 focus:border-indigo-500">
+                            <p class="mt-1 text-xs text-gray-500">JPG, PNG, WEBP up to 2MB.</p>
+                        </div>
+                        
                         @error('image') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                     </div>
                     
-                    <div class="pt-2 border-t border-gray-100">
-                        <label for="gallery" class="block text-sm font-medium text-gray-700 mb-1">Add More Gallery Images</label>
-                        <input type="file" id="gallery" name="gallery[]" accept="image/jpeg,image/png,image/jpg,image/webp" multiple class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 border border-gray-300 rounded-lg p-1.5 focus:ring-gray-500 focus:border-gray-500">
-                        @error('gallery.*') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                    <div class="pt-2 border-t border-gray-100" x-data="editGalleryUpload({{ json_encode($product->images->map(fn($img) => ['id' => $img->id, 'url' => Storage::url($img->image_url)])->toArray()) }})">
+                        <label for="gallery" class="block text-sm font-medium text-gray-700 mb-1">Additional Images</label>
                         
-                        @if($product->images->count() > 0)
-                            <div class="mt-3 grid grid-cols-4 gap-2">
-                                @foreach($product->images as $img)
-                                    <div class="relative w-full aspect-square rounded border border-gray-200 overflow-hidden group">
-                                        <img src="{{ asset('storage/' . $img->image_url) }}" class="w-full h-full object-cover">
+                        <!-- Existing Images -->
+                        <div x-show="existingImages.length > 0" class="mb-4" style="display: none;">
+                            <p class="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Current Additional Images</p>
+                            <div class="flex flex-wrap gap-3">
+                                <template x-for="(image, index) in existingImages" :key="'existing-'+image.id">
+                                    <div class="relative w-20 h-20 flex-none rounded-md overflow-hidden border border-gray-200 group">
+                                        <img :src="image.url" alt="Additional image" class="w-full h-full object-cover">
+                                        <button type="button" @click="removeExistingImage(index)" class="absolute top-1 right-1 bg-gray-700/80 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-500 focus:outline-none shadow-sm m-0 p-0 transition-colors opacity-0 group-hover:opacity-100">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        </button>
                                     </div>
-                                @endforeach
+                                </template>
                             </div>
-                        @endif
+                            
+                            <!-- Hidden inputs for deleted existing images -->
+                            <template x-for="id in deletedExistingImages" :key="'deleted-'+id">
+                                <input type="hidden" name="delete_gallery_images[]" :value="id">
+                            </template>
+                        </div>
+
+                        <div x-show="previewImages.length > 0" style="display: none;">
+                            <p class="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">New Images</p>
+                            <div class="mb-3 flex flex-wrap pb-2 gap-3">
+                                <!-- New images being previewed -->
+                                <template x-for="(img, index) in previewImages" :key="'preview-'+index">
+                                    <div class="relative w-20 h-20 flex-none rounded-md overflow-hidden border border-green-300 group">
+                                        <img :src="img.url" alt="Preview image" class="w-full h-full object-cover">
+                                        <button type="button" @click="removePreview(index)" class="absolute top-1 right-1 bg-gray-700/80 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-500 focus:outline-none shadow-sm m-0 p-0 transition-colors opacity-0 group-hover:opacity-100">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        </button>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div>
+                            <input type="file" id="gallery" name="gallery[]" accept="image/jpeg,image/png,image/jpg,image/webp" multiple @change="handleFileChange" x-ref="fileInput" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 border border-gray-300 rounded-lg p-1.5 focus:ring-gray-500 focus:border-gray-500">
+                            <p class="mt-1 text-xs text-gray-500">Upload multiple additional images.</p>
+                        </div>
+
+                        @error('gallery.*') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </div>
@@ -173,8 +212,88 @@
             Cancel
         </a>
         <button type="submit" class="px-5 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm transition-colors">
-            Save Changes
+            Update Product
         </button>
     </div>
 </form>
+
+@push('scripts')
+<script>
+    document.addEventListener('alpine:init', () => {
+        if (!Alpine.data('editMainImageUpload')) {
+            Alpine.data('editMainImageUpload', (existingUrl) => ({
+                existingImage: existingUrl,
+                removeExisting: false,
+                preview: null,
+                
+                handleFileChange(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        if (this.preview) URL.revokeObjectURL(this.preview);
+                        this.preview = URL.createObjectURL(file);
+                        this.removeExisting = true;
+                    }
+                },
+                
+                removeImage() {
+                    if (this.preview) {
+                        URL.revokeObjectURL(this.preview);
+                        this.preview = null;
+                        if(this.$refs.fileInput) this.$refs.fileInput.value = '';
+                    } else if (this.existingImage) {
+                        this.removeExisting = true;
+                    }
+                }
+            }));
+        }
+
+        if (!Alpine.data('editGalleryUpload')) {
+            Alpine.data('editGalleryUpload', (initialImages = []) => ({
+                existingImages: initialImages,
+                deletedExistingImages: [],
+                previewImages: [],
+                files: [],
+
+                handleFileChange(event) {
+                    const selectedFiles = Array.from(event.target.files);
+                    
+                    selectedFiles.forEach(file => {
+                        const isDuplicate = this.files.some(f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified);
+                        
+                        if (!isDuplicate) {
+                            this.files.push(file);
+                            this.previewImages.push({
+                                url: URL.createObjectURL(file),
+                                file: file
+                            });
+                        }
+                    });
+                    
+                    this.updateFileInput();
+                },
+
+                removeExistingImage(index) {
+                    const img = this.existingImages[index];
+                    this.deletedExistingImages.push(img.id);
+                    this.existingImages.splice(index, 1);
+                },
+
+                removePreview(index) {
+                    URL.revokeObjectURL(this.previewImages[index].url);
+                    this.previewImages.splice(index, 1);
+                    this.files.splice(index, 1);
+                    this.updateFileInput();
+                },
+
+                updateFileInput() {
+                    const dataTransfer = new DataTransfer();
+                    this.files.forEach(file => dataTransfer.items.add(file));
+                    if(this.$refs.fileInput) this.$refs.fileInput.files = dataTransfer.files;
+                }
+            }));
+        }
+    });
+
+</script>
+@endpush
 @endsection
