@@ -9,14 +9,21 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\BannerController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{slug}', [\App\Http\Controllers\ProductController::class, 'show'])->name('products.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Addresses
+    Route::get('/profile/addresses', [\App\Http\Controllers\AddressController::class, 'index'])->name('profile.addresses.index');
+    Route::post('/profile/addresses', [\App\Http\Controllers\AddressController::class, 'store'])->name('profile.addresses.store');
+    Route::put('/profile/addresses/{address}', [\App\Http\Controllers\AddressController::class, 'update'])->name('profile.addresses.update');
+    Route::delete('/profile/addresses/{address}', [\App\Http\Controllers\AddressController::class, 'destroy'])->name('profile.addresses.destroy');
+    Route::patch('/profile/addresses/{address}/default', [\App\Http\Controllers\AddressController::class, 'setDefault'])->name('profile.addresses.setDefault');
 });
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
