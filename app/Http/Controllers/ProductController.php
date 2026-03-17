@@ -64,6 +64,19 @@ class ProductController extends Controller
             ->limit(4)
             ->get();
 
-        return view('products.show', compact('product', 'mainImage', 'thumbs', 'specs', 'relatedProducts'));
+        // Previous and Next Product Navigation
+        $prevProduct = Product::where('category_id', $product->category_id)
+            ->where('id', '<', $product->id)
+            ->where('status', true)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $nextProduct = Product::where('category_id', $product->category_id)
+            ->where('id', '>', $product->id)
+            ->where('status', true)
+            ->orderBy('id', 'asc')
+            ->first();
+
+        return view('products.show', compact('product', 'mainImage', 'thumbs', 'specs', 'relatedProducts', 'prevProduct', 'nextProduct'));
     }
 }

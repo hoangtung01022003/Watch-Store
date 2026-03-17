@@ -34,7 +34,7 @@
                             <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                             </svg>
-                            <a href="{{ route('products.index', ['category' => $product->category_id]) }}" class="ml-1 text-gray-500 hover:text-luxury-gold transition-colors md:ml-2">
+                            <a href="{{ route('products.index', ['category_id' => $product->category_id]) }}" class="ml-1 text-gray-500 hover:text-luxury-gold transition-colors md:ml-2">
                                 {{ $product->category->name }}
                             </a>
                         </div>
@@ -48,6 +48,23 @@
                         </div>
                     </li>
                 </ol>
+                
+                <!-- Previous/Next Product Navigation -->
+                <div class="ml-auto flex space-x-4 border-l pl-4 border-gray-300">
+                    @if($prevProduct)
+                        <a href="{{ route('products.show', $prevProduct->slug) }}" class="flex items-center text-gray-500 hover:text-luxury-gold transition-colors" title="{{ $prevProduct->name }}">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                            <span class="hidden sm:inline">Trước</span>
+                        </a>
+                    @endif
+                    
+                    @if($nextProduct)
+                        <a href="{{ route('products.show', $nextProduct->slug) }}" class="flex items-center text-gray-500 hover:text-luxury-gold transition-colors" title="{{ $nextProduct->name }}">
+                            <span class="hidden sm:inline">Tiếp</span>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        </a>
+                    @endif
+                </div>
             </nav>
 
             <!-- 2. Main Product Section -->

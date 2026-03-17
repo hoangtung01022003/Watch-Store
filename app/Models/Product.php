@@ -46,4 +46,43 @@ class Product extends Model
     {
         return $this->hasOne(ProductSpec::class);
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        });
+
+        $query->when(isset($filters['category_id']), function ($query) use ($filters) {
+            $categoryIds = array_filter((array) $filters['category_id']);
+            if (!empty($categoryIds)) {
+                $query->whereIn('category_id', $categoryIds);
+            }
+        });
+
+        $query->when(isset($filters['brand_id']), function ($query) use ($filters) {
+            $brandIds = array_filter((array) $filters['brand_id']);
+            if (!empty($brandIds)) {
+                $query->whereIn('brand_id', $brandIds);
+            }
+        });
+
+        if (isset($filters['min_price']) && isset($filters['max_price'])) {
+            $min = (float) $filters['min_price'];
+            $max = (float) $filters['max_price'];
+            if ($min <= $max) {
+                 $query->whereBetween('price', [$min, $max]);
+            }
+        } else {
+            $query->when($filters['min_price'] ?? false, function ($query, $minPrice) {
+                $query->where('price', '>=', (float) $minPrice);
+            });
+            $query->when($filters['max_price'] ?? false, function ($query, $maxPrice) {
+                $query->where('price', '<=', (float) $maxPrice);
+            });
+        }
+    }
 }

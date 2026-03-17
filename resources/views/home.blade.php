@@ -117,8 +117,8 @@
                         <h2 id="featured-heading" class="font-serif text-3xl md:text-4xl text-luxury-dark mb-4">Featured Watches</h2>
                         <div class="w-12 h-0.5 bg-luxury-gold"></div>
                     </div>
-                    <a href="{{ route('products.index') }}" class="hidden sm:inline-flex items-center text-sm font-medium text-luxury-dark hover:text-luxury-gold uppercase tracking-wider transition-colors duration-300">
-                        View Collection <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                    <a href="{{ route('products.index') }}" class="text-sm font-semibold text-luxury-dark hover:text-luxury-gold transition-colors tracking-widest uppercase flex items-center gap-2">
+                        View Collection <span aria-hidden="true">&rarr;</span>
                     </a>
                 </div>
 
@@ -127,7 +127,7 @@
                         <div class="group relative bg-white flex flex-col h-full hover:shadow-xl transition-shadow duration-300 border border-gray-100">
                             <!-- Image Container 1:1 -->
                             <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-100 relative">
-                                <a href="#">
+                                <a href="{{ route('products.show', $product->slug) }}">
                                     @if($product->image)
                                         <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700">
                                     @else
@@ -149,7 +149,7 @@
                             <div class="p-4 flex-grow flex flex-col text-center">
                                 <span class="text-xs text-gray-500 uppercase tracking-widest mb-2 font-medium">{{ $product->brand->name ?? 'Exclusive' }}</span>
                                 <h3 class="font-serif text-lg text-luxury-dark mb-2 line-clamp-2">
-                                    <a href="#" class="hover:text-luxury-gold transition-colors">{{ $product->name }}</a>
+                                    <a href="{{ route('products.show', $product->slug) }}" class="hover:text-luxury-gold transition-colors">{{ $product->name }}</a>
                                 </h3>
                                 <div class="mt-auto pt-2">
                                     <span class="text-sm font-semibold text-luxury-dark">{{ number_format($product->price, 0, ',', '.') }} ₫</span>

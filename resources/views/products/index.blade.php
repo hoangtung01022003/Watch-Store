@@ -87,25 +87,29 @@
                     @foreach($products as $product)
                         <div class="bg-white border border-gray-100 hover:border-luxury-gold hover:shadow-xl transition-all duration-300 group flex flex-col h-full">
                             <div class="relative w-full aspect-w-4 aspect-h-5 overflow-hidden bg-gray-50 p-6">
-                                <a href="#">
+                                <a href="{{ route('products.show', $product->slug) }}">
                                     @if($product->image)
                                         <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-contain mix-blend-darken group-hover:scale-105 transition-transform duration-700">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center text-gray-400 text-xs font-serif italic group-hover:scale-105 transition-transform duration-700">No Image</div>
                                     @endif
                                     
-                                    <!-- Overlay action -->
-                                    <div class="absolute inset-0 bg-white/40 backdrop-blur-[2px] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <button class="bg-luxury-dark text-white text-xs uppercase tracking-widest font-semibold py-3 px-6 hover:bg-luxury-gold transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300">
+                                    <!-- Quick Actions Base -->
+                                    <div class="absolute inset-x-0 bottom-0 bg-white bg-opacity-95 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out flex flex-col z-20 shadow-md border-t border-gray-100">
+                                        <a href="{{ route('products.show', $product->slug) }}" class="flex-1 py-3 text-center text-xs font-semibold text-luxury-dark uppercase tracking-wider hover:bg-gray-50 hover:text-luxury-gold transition-colors block border-b border-gray-100">
                                             Quick View
-                                        </button>
+                                        </a>
+                                        <form action="#" method="POST" class="flex-1">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        </form>
                                     </div>
                                 </a>
                             </div>
                             <div class="p-6 text-center flex flex-col flex-grow border-t border-gray-50">
                                 <div class="text-[10px] text-gray-400 mb-2 font-bold tracking-widest uppercase">{{ $product->brand->name ?? 'Premium' }}</div>
                                 <h3 class="text-base font-serif text-luxury-dark mb-3 line-clamp-2 leading-relaxed">
-                                    <a href="#" class="hover:text-luxury-gold transition-colors">{{ $product->name }}</a>
+                                    <a href="{{ route('products.show', $product->slug) }}" class="hover:text-luxury-gold transition-colors">{{ $product->name }}</a>
                                 </h3>
                                 <div class="mt-auto pt-4 flex flex-col items-center justify-center">
                                     <span class="text-sm font-semibold text-luxury-dark mb-4">{{ number_format($product->price, 0, ',', '.') }} ₫</span>
