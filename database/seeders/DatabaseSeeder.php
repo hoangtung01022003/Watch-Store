@@ -18,6 +18,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            DemoDataSeeder::class,
+        ]);
+
         // Admin
         User::create([
             'name' => 'Admin User',

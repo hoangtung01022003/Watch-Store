@@ -29,6 +29,22 @@
                                 <span class="ml-2 text-sm tracking-wide truncate">Dashboard</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('admin.categories.index') }}" class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-700 text-gray-300 hover:text-white border-l-4 border-transparent hover:border-indigo-500 pr-6">
+                                <span class="inline-flex justify-center items-center ml-4">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                                </span>
+                                <span class="ml-2 text-sm tracking-wide truncate">Categories</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.brands.index') }}" class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-700 text-gray-300 hover:text-white border-l-4 border-transparent hover:border-indigo-500 pr-6">
+                                <span class="inline-flex justify-center items-center ml-4">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                                </span>
+                                <span class="ml-2 text-sm tracking-wide truncate">Brands</span>
+                            </a>
+                        </li>
                         <!-- Add more nav items here -->
                     </ul>
                 </div>

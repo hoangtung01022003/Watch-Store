@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('product_specs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->string('case_size')->nullable();
             $table->string('water_resistance')->nullable();
             $table->string('strap_material')->nullable();

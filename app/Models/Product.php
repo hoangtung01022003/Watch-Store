@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -24,7 +25,6 @@ class Product extends Model
 
     protected $casts = [
         'status' => 'boolean',
-        'price' => 'decimal:2',
     ];
 
     public function category()
@@ -42,13 +42,8 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
-    public function spec()
+    public function specs()
     {
         return $this->hasOne(ProductSpec::class);
-    }
-
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItem::class);
     }
 }

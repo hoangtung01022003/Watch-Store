@@ -1,0 +1,39 @@
+PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+
+  Dropping all tables ....... 84.31ms DONE
+
+   INFO  Preparing database.  
+
+  Creating migration table .. 10.29ms DONE
+
+   INFO  Running migrations.  
+
+  0001_01_01_000000_create_users_table  44.05ms DONE
+  0001_01_01_000001_create_cache_table  38.47ms DONE
+  0001_01_01_000002_create_jobs_table  41.51ms DONE
+  2026_03_16_120722_create_categories_table  5.66ms DONE
+  2026_03_16_120723_create_brands_table  6.34ms DONE
+  2026_03_16_120723_create_products_table  83.52ms DONE
+  2026_03_16_120724_create_order_items_table  25.95ms FAIL
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[HY000]: General error: 1005 Can't create table `watchstore`.`order_items` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: watchstore, SQL: alter table `order_items` add constraint `order_items_order_id_foreign` foreign key (`order_id`) references `orders` (`id`) on delete cascade)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:838
+    834▕             $exceptionType = $this->isUniqueConstraintError($e)
+    835▕                 ? UniqueConstraintViolationException::class
+    836▕                 : QueryException::class;
+    837▕ 
+  ➜ 838▕             throw new $exceptionType(
+    839▕                 $this->getNameWithReadWriteType(),
+    840▕                 $query,
+    841▕                 $this->prepareBindings($bindings),
+    842▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:584
+      PDOException::("SQLSTATE[HY000]: General error: 1005 Can't create table `watchstore`.`order_items` (errno: 150 "Foreign key constraint is incorrectly formed")")
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:584
+      PDOStatement::execute()
+
