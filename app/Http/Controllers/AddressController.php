@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AddressRequest;
+use App\Http\Requests\StoreAddressRequest;
+use App\Http\Requests\UpdateAddressRequest;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class AddressController extends Controller
         return view('profile.addresses', compact('addresses'));
     }
 
-    public function store(AddressRequest $request)
+    public function store(StoreAddressRequest $request)
     {
         $user = Auth::user();
         $isFirst = $user->addresses()->count() === 0;
@@ -27,13 +28,23 @@ class AddressController extends Controller
         return back()->with('success', 'Address added successfully.');
     }
 
-    public function update(AddressRequest $request, Address $address)
+    public function update(UpdateAddressRequest $request, Address $address)
     {
         if ($address->user_id !== Auth::id()) {
             abort(403);
         }
 
-        $address->update($request->validated());
+        $data = $request->validated();
+        
+        if (isset($data['is_default']) && $data['is_default']) {
+            Auth::user()->addresses()->update(['is_default' => false]);
+            $data['is_default'] = true;
+        } else {
+            // Cannot un-default an address directly, so just ignore or set appropriately
+            $data['is_default'] = false;
+        }
+
+        $address->update($data);
 
         return back()->with('success', 'Address updated successfully.');
     }
@@ -46,6 +57,14 @@ class AddressController extends Controller
 
         $address->delete();
 
+        // If the deleted address was default, make the most recent one default
+        if ($address->is_default) {
+            $latestAddress = Auth::user()->addresses()->latest()->first();
+            if ($latestAddress) {
+                $latestAddress->update(['is_default' => true]);
+            }
+        }
+
         return back()->with('success', 'Address deleted successfully.');
     }
 
@@ -57,7 +76,7 @@ class AddressController extends Controller
 
         // Set all to false
         Auth::user()->addresses()->update(['is_default' => false]);
-        
+
         // Set selected to true
         $address->update(['is_default' => true]);
 

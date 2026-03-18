@@ -124,6 +124,9 @@
                                         @if(Auth::user()->role === 'admin')
                                             <x-dropdown-link :href="route('admin.dashboard') ?? '#'" class="font-sans hover:text-luxury-gold">{{ __('Admin Dashboard') }}</x-dropdown-link>
                                         @endif
+                                        <x-dropdown-link :href="route('orders.index')" class="font-sans hover:text-luxury-gold">
+                                            {{ __('Order History') }}
+                                        </x-dropdown-link>
                                         <x-dropdown-link :href="route('profile.edit') ?? '#'" class="font-sans hover:text-luxury-gold">{{ __('Profile') }}</x-dropdown-link>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf

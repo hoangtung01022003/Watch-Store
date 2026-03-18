@@ -27,6 +27,10 @@
                                 class="whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-xs uppercase tracking-widest transition-colors">
                             Change Password
                         </button>
+                        <button @click="window.location.href='{{ route('profile.addresses.index') }}'"
+                                class="border-transparent text-gray-500 hover:text-luxury-dark hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-xs uppercase tracking-widest transition-colors">
+                            Address Book
+                        </button>
                     </nav>
                 </div>
             </div>

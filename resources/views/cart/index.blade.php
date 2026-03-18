@@ -92,7 +92,7 @@
                             <span class="font-semibold text-xl text-luxury-dark">{{ number_format($total, 0, ',', '.') }} ₫</span>
                         </div>
 
-                        <a href="#" class="block w-full text-center bg-luxury-dark text-white uppercase tracking-widest text-sm py-4 hover:bg-luxury-gold transition-colors duration-300">
+                        <a href="{{ route('checkout.index') }}" class="block w-full text-center bg-luxury-dark text-white uppercase tracking-widest text-sm py-4 hover:bg-luxury-gold transition-colors duration-300">
                             Proceed to Checkout
                         </a>
                         

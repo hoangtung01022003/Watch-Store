@@ -31,6 +31,15 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/addresses/{address}', [\App\Http\Controllers\AddressController::class, 'update'])->name('profile.addresses.update');
     Route::delete('/profile/addresses/{address}', [\App\Http\Controllers\AddressController::class, 'destroy'])->name('profile.addresses.destroy');
     Route::patch('/profile/addresses/{address}/default', [\App\Http\Controllers\AddressController::class, 'setDefault'])->name('profile.addresses.setDefault');
+
+    // Checkout Routes
+    Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'show'])->name('checkout.index');
+    Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class, 'processCheckout'])->name('checkout.process');
+    Route::get('/checkout/{order:id}/success', [\App\Http\Controllers\CheckoutController::class, 'success'])->name('checkout.success');
+
+    // Order History Routes
+    Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
 });
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
@@ -49,6 +58,11 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Banners
     Route::post('banners/{banner}/toggle', [BannerController::class, 'toggle'])->name('banners.toggle');
     Route::resource('banners', BannerController::class);
+
+    // Orders
+    Route::get('orders', [\App\Http\Controllers\AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [\App\Http\Controllers\AdminOrderController::class, 'show'])->name('orders.show');
+    Route::patch('orders/{order}/status', [\App\Http\Controllers\AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
     // Customers
     Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');

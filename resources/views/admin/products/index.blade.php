@@ -62,12 +62,25 @@
                         </span>
                     </td>
                     <td class="px-6 py-4">
-                        <div class="flex flex-row items-center gap-2 flex-wrap justify-center">
+                        <div class="flex flex-row items-center gap-2 flex-wrap">
+                            @if($product->is_featured)
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-800 whitespace-nowrap">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                    Featured
+                                </span>
+                            @endif
                             <form action="{{ route('admin.products.toggle', $product->id) }}" method="POST" class="inline-block m-0 p-0">
                                 @csrf
-                                <button type="submit" class="focus:outline-none relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 {{ $product->status ? 'bg-indigo-600' : 'bg-gray-200' }}" title="{{ $product->status ? 'Click to disable' : 'Click to enable' }}">
-                                    <span class="sr-only">Toggle status</span>
-                                    <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform {{ $product->status ? 'translate-x-6' : 'translate-x-1' }}"></span>
+                                <button type="submit" class="focus:outline-none">
+                                    @if($product->is_active)
+                                        <span class="inline-flex flex-row items-center px-2 py-1 rounded-full text-[10px] font-medium bg-green-100 text-green-800 whitespace-nowrap hover:bg-green-200 transition-colors cursor-pointer" title="Click to disable">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        </span>
+                                    @else
+                                        <span class="inline-flex flex-row items-center px-2 py-1 rounded-full text-[10px] font-medium bg-gray-100 text-gray-800 whitespace-nowrap hover:bg-gray-200 transition-colors cursor-pointer" title="Click to enable">
+                                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        </span>
+                                    @endif
                                 </button>
                             </form>
                             @if($product->trashed())
