@@ -11,22 +11,31 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::where('status', true)->with(['category', 'brand']);
+        // Normalize arrays for category_id and brand_id
+        $categoryIds = $request->has('category_id') ? (array) $request->category_id : [];
+        $brandIds = $request->has('brand_id') ? (array) $request->brand_id : [];
 
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
-            });
-        }
+        $filters = [
+            'search' => $request->search,
+            'category_id' => $categoryIds,
+            'brand_id' => $brandIds,
+            'min_price' => $request->min_price,
+            'max_price' => $request->max_price,
+            'sort' => $request->sort,
+        ];
 
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
-        }
+        $query = Product::query()
+            ->where('status', true)
+            ->with(['category', 'brand'])
+            ->filter($filters);
 
-        if ($request->filled('brand_id')) {
-            $query->where('brand_id', $request->brand_id);
+        // Sorting logic
+        if ($filters['sort'] === 'price_asc') {
+            $query->orderBy('price', 'asc');
+        } elseif ($filters['sort'] === 'price_desc') {
+            $query->orderBy('price', 'desc');
+        } else {
+            $query->latest();
         }
 
         $products = $query->paginate(12)->appends($request->query());
@@ -34,7 +43,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $brands = Brand::all();
 
-        return view('products.index', compact('products', 'categories', 'brands'));
+        return view('products.index', compact('products', 'categories', 'brands', 'filters'));
     }
 
     public function show($slug)

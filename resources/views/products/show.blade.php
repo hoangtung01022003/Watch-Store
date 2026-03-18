@@ -141,7 +141,41 @@
                     </div>
 
                     <!-- Add to Cart Form -->
-                    <form action="#" method="POST" class="mt-auto">
+                    <form action="{{ route('cart.add') }}" method="POST" class="mt-auto" @submit.prevent="
+                        fetch('{{ route('cart.add') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                product_id: {{ $product->id }},
+                                quantity: quantity
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.success) {
+                                // Find the cart badge and update it
+                                const cartBadge = document.getElementById('cart-badge');
+                                if(cartBadge) {
+                                    cartBadge.textContent = data.cartCount;
+                                    cartBadge.classList.remove('hidden');
+                                    cartBadge.classList.add('flex');
+                                }
+                                
+                                // Show success toast/notification instead of reload
+                                alert('Đã thêm sản phẩm vào giỏ hàng!');
+                            } else {
+                                alert(data.message || 'Có lỗi xảy ra!');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Có lỗi xảy ra khi thêm vào giỏ hàng.');
+                        });
+                    ">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         

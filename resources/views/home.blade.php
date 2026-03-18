@@ -151,8 +151,51 @@
                                 <h3 class="font-serif text-lg text-luxury-dark mb-2 line-clamp-2">
                                     <a href="{{ route('products.show', $product->slug) }}" class="hover:text-luxury-gold transition-colors">{{ $product->name }}</a>
                                 </h3>
-                                <div class="mt-auto pt-2">
-                                    <span class="text-sm font-semibold text-luxury-dark">{{ number_format($product->price, 0, ',', '.') }} ₫</span>
+                                <div class="mt-auto pt-4 flex flex-col items-center justify-center">
+                                    <span class="text-sm font-semibold text-luxury-dark mb-4">{{ number_format($product->price, 0, ',', '.') }} ₫</span>
+                                    @if($product->stock > 0)
+                                    <button class="text-xs uppercase tracking-widest font-semibold border-b border-gray-300 pb-1 hover:text-luxury-gold hover:border-luxury-gold transition-colors" title="Add to cart"
+                                            onclick="
+                                                event.preventDefault();
+                                                fetch('{{ route('cart.add') }}', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+                                                        'Accept': 'application/json'
+                                                    },
+                                                    body: JSON.stringify({
+                                                        product_id: {{ $product->id }},
+                                                        quantity: 1
+                                                    })
+                                                })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    if(data.success) {
+                                                        const cartBadge = document.getElementById('cart-badge');
+                                                        if(cartBadge) {
+                                                            cartBadge.textContent = data.cartCount;
+                                                            cartBadge.classList.remove('hidden');
+                                                            cartBadge.classList.add('flex');
+                                                        }
+                                                        alert('Đã thêm sản phẩm vào giỏ hàng!');
+                                                    } else {
+                                                        alert(data.message || 'Có lỗi xảy ra!');
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error:', error);
+                                                    alert('Có lỗi xảy ra khi thêm vào giỏ hàng.');
+                                                });
+                                            "
+                                    >
+                                        Add to Cart
+                                    </button>
+                                    @else
+                                    <button class="text-xs uppercase tracking-widest font-semibold border-b border-gray-300 pb-1 text-gray-400 cursor-not-allowed" disabled>
+                                        Out of Stock
+                                    </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>

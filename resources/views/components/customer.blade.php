@@ -136,12 +136,12 @@
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                                 </a>
                             @endauth
-
                             <!-- Cart -->
-                            <a href="#" class="relative text-gray-700 hover:text-luxury-gold transition-colors duration-300 flex items-center group">
+                            <a href="{{ route('cart.index') }}" class="relative text-gray-700 hover:text-luxury-gold transition-colors duration-300 flex items-center group">
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                <span class="absolute -top-2 -right-2 bg-luxury-dark group-hover:bg-luxury-gold transition-colors duration-300 text-white rounded-full text-[10px] font-bold w-4 h-4 flex items-center justify-center shadow-sm">
-                                    {{ Session::has('cart') ? count(Session::get('cart')) : 0 }}
+                                @php $cartCount = count(session('cart', [])); @endphp
+                                <span id="cart-badge" class="absolute -top-2 -right-2 bg-luxury-dark group-hover:bg-luxury-gold transition-colors duration-300 text-white rounded-full text-[10px] font-bold w-4 h-4 {{ $cartCount > 0 ? 'flex' : 'hidden' }} items-center justify-center shadow-sm">
+                                    {{ $cartCount > 0 ? $cartCount : '' }}
                                 </span>
                             </a>
                         </div>

@@ -10,23 +10,33 @@
 
                 <h3 class="text-xl font-serif text-luxury-dark mb-6 tracking-wide">Refine Search</h3>
                 
-                <form action="{{ route('products.index') }}" method="GET" class="space-y-8">
+                <form action="{{ route('products.index') }}" method="GET" class="space-y-8" id="filter-form">
                     <!-- Maintain search if it exists -->
                     @if(request('search'))
                         <input type="hidden" name="search" value="{{ request('search') }}">
                     @endif
+
+                    <!-- Sorting -->
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-widest mb-4">Sort By</h4>
+                        <select name="sort" class="w-full border-gray-300 focus:border-luxury-gold focus:ring-luxury-gold text-sm text-gray-600 transition-colors" onchange="document.getElementById('filter-form').submit()">
+                            <option value="default" {{ request('sort') == 'default' ? 'selected' : '' }}>Newest Arrivals</option>
+                            <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
+                            <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
+                        </select>
+                    </div>
 
                     <!-- Categories Filter -->
                     <div>
                         <h4 class="text-xs font-bold text-gray-800 uppercase tracking-widest mb-4">Categories</h4>
                         <div class="space-y-3">
                             <div class="flex items-center group">
-                                <input type="radio" id="cat_all" name="category_id" value="" class="h-4 w-4 text-luxury-gold focus:ring-luxury-gold border-gray-300 transition-colors" {{ !request('category_id') ? 'checked' : '' }}>
+                                <input type="checkbox" id="cat_all" class="h-4 w-4 text-luxury-gold focus:ring-luxury-gold border-gray-300 transition-colors" {{ empty($filters['category_id']) ? 'checked' : '' }} onclick="document.querySelectorAll('input[name=\'category_id[]\']').forEach(cb => cb.checked = false); this.form.submit();">
                                 <label for="cat_all" class="ml-3 text-sm text-gray-600 group-hover:text-luxury-dark cursor-pointer transition-colors">All Categories</label>
                             </div>
                             @foreach($categories as $category)
                                 <div class="flex items-center group">
-                                    <input type="radio" id="cat_{{ $category->id }}" name="category_id" value="{{ $category->id }}" class="h-4 w-4 text-luxury-gold focus:ring-luxury-gold border-gray-300 transition-colors" {{ request('category_id') == $category->id ? 'checked' : '' }}>
+                                    <input type="checkbox" id="cat_{{ $category->id }}" name="category_id[]" value="{{ $category->id }}" class="h-4 w-4 text-luxury-gold focus:ring-luxury-gold border-gray-300 transition-colors category-checkbox" {{ in_array($category->id, $filters['category_id']) ? 'checked' : '' }} onchange="document.getElementById('cat_all').checked = false; this.form.submit();">
                                     <label for="cat_{{ $category->id }}" class="ml-3 text-sm text-gray-600 group-hover:text-luxury-dark cursor-pointer transition-colors">{{ $category->name }}</label>
                                 </div>
                             @endforeach
@@ -38,24 +48,36 @@
                         <h4 class="text-xs font-bold text-gray-800 uppercase tracking-widest mb-4">Brands</h4>
                         <div class="space-y-3">
                             <div class="flex items-center group">
-                                <input type="radio" id="brand_all" name="brand_id" value="" class="h-4 w-4 text-luxury-gold focus:ring-luxury-gold border-gray-300 transition-colors" {{ !request('brand_id') ? 'checked' : '' }}>
+                                <input type="checkbox" id="brand_all" class="h-4 w-4 text-luxury-gold focus:ring-luxury-gold border-gray-300 transition-colors" {{ empty($filters['brand_id']) ? 'checked' : '' }} onclick="document.querySelectorAll('input[name=\'brand_id[]\']').forEach(cb => cb.checked = false); this.form.submit();">
                                 <label for="brand_all" class="ml-3 text-sm text-gray-600 group-hover:text-luxury-dark cursor-pointer transition-colors">All Brands</label>
                             </div>
                             @foreach($brands as $brand)
                                 <div class="flex items-center group">
-                                    <input type="radio" id="brand_{{ $brand->id }}" name="brand_id" value="{{ $brand->id }}" class="h-4 w-4 text-luxury-gold focus:ring-luxury-gold border-gray-300 transition-colors" {{ request('brand_id') == $brand->id ? 'checked' : '' }}>
+                                    <input type="checkbox" id="brand_{{ $brand->id }}" name="brand_id[]" value="{{ $brand->id }}" class="h-4 w-4 text-luxury-gold focus:ring-luxury-gold border-gray-300 transition-colors brand-checkbox" {{ in_array($brand->id, $filters['brand_id']) ? 'checked' : '' }} onchange="document.getElementById('brand_all').checked = false; this.form.submit();">
                                     <label for="brand_{{ $brand->id }}" class="ml-3 text-sm text-gray-600 group-hover:text-luxury-dark cursor-pointer transition-colors">{{ $brand->name }}</label>
                                 </div>
                             @endforeach
                         </div>
                     </div>
 
-                    <div class="pt-4 border-t border-gray-100">
+                    <!-- Price Filter -->
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-widest mb-4">Price Range</h4>
+                        <div class="flex items-center gap-2">
+                            <input type="number" name="min_price" value="{{ request('min_price') }}" placeholder="Min ₫" class="w-full text-xs border-gray-300 focus:border-luxury-gold focus:ring-luxury-gold transition-colors py-2" min="0" step="100000">
+                            <span class="text-gray-400">-</span>
+                            <input type="number" name="max_price" value="{{ request('max_price') }}" placeholder="Max ₫" class="w-full text-xs border-gray-300 focus:border-luxury-gold focus:ring-luxury-gold transition-colors py-2" min="0" step="100000">
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100 flex flex-col gap-3">
                         <button type="submit" class="w-full bg-luxury-dark text-white py-3 px-4 text-xs font-semibold uppercase tracking-widest hover:bg-luxury-gold transition-colors duration-300 focus:outline-none">
                             Apply Filters
                         </button>
-                        @if(request()->hasAny(['category_id', 'brand_id', 'search']))
-                            <a href="{{ route('products.index') }}" class="block text-center text-xs uppercase tracking-widest font-semibold text-gray-400 hover:text-luxury-dark transition-colors mt-4">Clear All Filters</a>
+                        @if(request()->hasAny(['category_id', 'brand_id', 'search', 'min_price', 'max_price', 'sort']))
+                            <a href="{{ route('products.index') }}" class="block text-center w-full border border-gray-200 text-gray-600 py-3 px-4 text-xs font-semibold uppercase tracking-widest hover:bg-gray-50 hover:text-luxury-dark transition-colors duration-300 focus:outline-none">
+                                Clear All Filters
+                            </a>
                         @endif
                     </div>
                 </form>
@@ -77,8 +99,40 @@
                         <p class="mt-2 text-xs uppercase tracking-widest text-gray-500 font-semibold">Exquisite Timepieces</p>
                     </div>
                 @endif
-                <div class="text-sm text-gray-500 hidden sm:block">
-                    Showing {{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }} of {{ $products->total() }}
+                <div class="flex items-center gap-6">
+                    <!-- Active Filters Display -->
+                    @if(request()->hasAny(['category_id', 'brand_id', 'search', 'min_price', 'max_price']))
+                        <div class="hidden lg:flex items-center gap-2">
+                            <span class="text-xs text-gray-500">Active Filters:</span>
+                            @if(request('search'))
+                                <span class="inline-flex items-center px-2 py-1 bg-gray-100 text-xs text-gray-600 border border-gray-200">
+                                    "{{ request('search') }}"
+                                    <a href="{{ request()->fullUrlWithQuery(['search' => null]) }}" class="ml-1 text-gray-400 hover:text-luxury-dark">&times;</a>
+                                </span>
+                            @endif
+                            @foreach($filters['category_id'] as $catId)
+                                @php $catName = $categories->firstWhere('id', $catId)?->name; @endphp
+                                @if($catName)
+                                    <span class="inline-flex items-center px-2 py-1 bg-gray-100 text-xs text-gray-600 border border-gray-200">
+                                        {{ $catName }}
+                                        <a href="{{ request()->fullUrlWithQuery(['category_id' => array_diff($filters['category_id'], [$catId])]) }}" class="ml-1 text-gray-400 hover:text-luxury-dark">&times;</a>
+                                    </span>
+                                @endif
+                            @endforeach
+                            @foreach($filters['brand_id'] as $brandId)
+                                @php $brandName = $brands->firstWhere('id', $brandId)?->name; @endphp
+                                @if($brandName)
+                                    <span class="inline-flex items-center px-2 py-1 bg-gray-100 text-xs text-gray-600 border border-gray-200">
+                                        {{ $brandName }}
+                                        <a href="{{ request()->fullUrlWithQuery(['brand_id' => array_diff($filters['brand_id'], [$brandId])]) }}" class="ml-1 text-gray-400 hover:text-luxury-dark">&times;</a>
+                                    </span>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
+                    <div class="text-sm text-gray-500 hidden sm:block">
+                        Showing {{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }} of {{ $products->total() }}
+                    </div>
                 </div>
             </div>
 
@@ -113,9 +167,49 @@
                                 </h3>
                                 <div class="mt-auto pt-4 flex flex-col items-center justify-center">
                                     <span class="text-sm font-semibold text-luxury-dark mb-4">{{ number_format($product->price, 0, ',', '.') }} ₫</span>
-                                    <button class="text-xs uppercase tracking-widest font-semibold border-b border-gray-300 pb-1 hover:text-luxury-gold hover:border-luxury-gold transition-colors" title="Add to cart">
+                                    @if($product->stock > 0)
+                                    <button class="text-xs uppercase tracking-widest font-semibold border-b border-gray-300 pb-1 hover:text-luxury-gold hover:border-luxury-gold transition-colors" title="Add to cart"
+                                            onclick="
+                                                event.preventDefault();
+                                                fetch('{{ route('cart.add') }}', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+                                                        'Accept': 'application/json'
+                                                    },
+                                                    body: JSON.stringify({
+                                                        product_id: {{ $product->id }},
+                                                        quantity: 1
+                                                    })
+                                                })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    if(data.success) {
+                                                        const cartBadge = document.getElementById('cart-badge');
+                                                        if(cartBadge) {
+                                                            cartBadge.textContent = data.cartCount;
+                                                            cartBadge.classList.remove('hidden');
+                                                            cartBadge.classList.add('flex');
+                                                        }
+                                                        alert('Đã thêm sản phẩm vào giỏ hàng!');
+                                                    } else {
+                                                        alert(data.message || 'Có lỗi xảy ra!');
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error:', error);
+                                                    alert('Có lỗi xảy ra khi thêm vào giỏ hàng.');
+                                                });
+                                            "
+                                    >
                                         Add to Cart
                                     </button>
+                                    @else
+                                    <button class="text-xs uppercase tracking-widest font-semibold border-b border-gray-300 pb-1 text-gray-400 cursor-not-allowed" disabled>
+                                        Out of Stock
+                                    </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
