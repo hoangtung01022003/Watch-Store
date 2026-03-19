@@ -140,25 +140,20 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
                     @foreach($products as $product)
                         <div class="bg-white border border-gray-100 hover:border-luxury-gold hover:shadow-xl transition-all duration-300 group flex flex-col h-full">
-                            <div class="relative w-full aspect-w-4 aspect-h-5 overflow-hidden bg-gray-50 p-6">
-                                <a href="{{ route('products.show', $product->slug) }}">
-                                    @if($product->image)
-                                        <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-contain mix-blend-darken group-hover:scale-105 transition-transform duration-700">
-                                    @else
-                                        <div class="w-full h-full flex items-center justify-center text-gray-400 text-xs font-serif italic group-hover:scale-105 transition-transform duration-700">No Image</div>
-                                    @endif
-                                    
-                                    <!-- Quick Actions Base -->
-                                    <div class="absolute inset-x-0 bottom-0 bg-white bg-opacity-95 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out flex flex-col z-20 shadow-md border-t border-gray-100">
-                                        <a href="{{ route('products.show', $product->slug) }}" class="flex-1 py-3 text-center text-xs font-semibold text-luxury-dark uppercase tracking-wider hover:bg-gray-50 hover:text-luxury-gold transition-colors block border-b border-gray-100">
-                                            Quick View
-                                        </a>
-                                        <form action="#" method="POST" class="flex-1">
-                                            @csrf
-                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        </form>
-                                    </div>
-                                </a>
+                            <div class="relative w-full aspect-[3/4] overflow-hidden bg-gray-50 flex items-center justify-center">
+                                <a href="{{ route('products.show', $product->slug) }}" class="absolute inset-0 z-10 w-full h-full"></a>
+                                @if($product->image)
+                                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-contain mix-blend-darken group-hover:scale-105 transition-transform duration-700 p-4">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-gray-400 text-xs font-serif italic group-hover:scale-105 transition-transform duration-700">No Image</div>
+                                @endif
+                                
+                                <!-- Quick Actions Base -->
+                                <div class="absolute inset-x-0 bottom-0 bg-white bg-opacity-95 opacity-0 translate-y-[10px] group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out flex flex-col z-20 shadow-md border-t border-gray-100">
+                                    <a href="{{ route('products.show', $product->slug) }}" class="relative z-30 flex-1 py-3 text-center text-xs font-semibold text-luxury-dark uppercase tracking-wider hover:bg-gray-50 hover:text-luxury-gold transition-colors block border-b border-gray-100">
+                                        Quick View
+                                    </a>
+                                </div>
                             </div>
                             <div class="p-6 text-center flex flex-col flex-grow border-t border-gray-50">
                                 <div class="text-[10px] text-gray-400 mb-2 font-bold tracking-widest uppercase">{{ $product->brand->name ?? 'Premium' }}</div>

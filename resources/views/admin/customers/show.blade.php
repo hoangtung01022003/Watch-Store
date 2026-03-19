@@ -89,7 +89,7 @@
                                 {{ $order->created_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 text-gray-900 font-medium">
-                                ${{ number_format($order->total_amount, 2) }}
+                                ${{ number_format($order->total_price, 2) }}
                             </td>
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">

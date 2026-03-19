@@ -288,7 +288,9 @@
                 updateFileInput() {
                     const dataTransfer = new DataTransfer();
                     this.files.forEach(file => dataTransfer.items.add(file));
-                    if(this.$refs.fileInput) this.$refs.fileInput.files = dataTransfer.files;
+                    if(this.$refs.fileInput) {
+                        this.$refs.fileInput.files = dataTransfer.files;
+                    }
                 }
             }));
         }

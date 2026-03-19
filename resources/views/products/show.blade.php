@@ -68,31 +68,30 @@
             </nav>
 
             <!-- 2. Main Product Section -->
-            <div class="flex flex-col md:flex-row gap-10 lg:gap-16 mb-20" x-data="{ 
+            <div class="flex flex-col md:flex-row gap-10 lg:gap-16 mb-20" x-data="{
                 mainImg: '{{ $mainImage ? Storage::url($mainImage->image_url) : ($product->image ? Storage::url($product->image) : asset('images/no-image.jpg')) }}',
                 quantity: 1,
                 maxStock: {{ $product->stock }}
             }">
-                
                 <!-- Left Column: Images -->
-                <div class="w-full md:w-1/2 flex flex-col gap-4">
+                <div class="w-full md:w-1/2 flex flex-col gap-4">      
                     <!-- Main Image -->
-                    <div class="aspect-square bg-white border border-gray-100 flex items-center justify-center p-4">
-                        <img :src="mainImg" alt="{{ $product->name }}" class="max-w-full max-h-full object-contain">
+                    <div class="relative w-full aspect-[4/3] overflow-hidden bg-gray-50 border border-gray-100 block">
+                        <img :src="mainImg" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover mix-blend-darken">
                     </div>
-                    
-                    <!-- Thumbnails -->
+
+                    <!-- Thumbnails Slider -->
                     @if($thumbs->count() > 0 || $mainImage)
-                        <div class="grid grid-cols-5 gap-2 sm:gap-4">
+                        <div class="flex overflow-x-auto gap-2 sm:gap-4 snap-x snap-mandatory hide-scrollbar pb-2">  
                             <!-- Main image as thumb -->
                             @if($mainImage || $product->image)
                                 @php
                                     $mainImgUrl = $mainImage ? Storage::url($mainImage->image_url) : Storage::url($product->image);
                                 @endphp
-                                <button type="button" @click="mainImg = '{{ $mainImgUrl }}'" 
-                                    :class="mainImg === '{{ $mainImgUrl }}' ? 'border-luxury-gold border-2' : 'border-gray-200 border'"
-                                    class="aspect-square bg-white p-2 hover:border-luxury-gold transition-colors">
-                                    <img src="{{ $mainImgUrl }}" alt="Thumb" class="w-full h-full object-cover">
+                                <button type="button" @click="mainImg = '{{ $mainImgUrl }}'"
+                                    :class="mainImg === '{{ $mainImgUrl }}' ? 'border-luxury-gold border-2' : 'border-gray-200 border'"       
+                                    class="relative flex-shrink-0 w-20 sm:w-24 aspect-[4/3] overflow-hidden bg-gray-50 hover:border-luxury-gold transition-colors snap-start block">
+                                    <img src="{{ $mainImgUrl }}" alt="Thumb" class="absolute inset-0 w-full h-full object-cover mix-blend-darken">
                                 </button>
                             @endif
                             
@@ -100,14 +99,13 @@
                             @foreach($thumbs as $thumb)
                                 <button type="button" @click="mainImg = '{{ Storage::url($thumb->image_url) }}'"
                                     :class="mainImg === '{{ Storage::url($thumb->image_url) }}' ? 'border-luxury-gold border-2' : 'border-gray-200 border'"
-                                    class="aspect-square bg-white p-2 hover:border-luxury-gold transition-colors">
-                                    <img src="{{ Storage::url($thumb->image_url) }}" alt="Thumb" class="w-full h-full object-cover">
+                                    class="relative flex-shrink-0 w-20 sm:w-24 aspect-[4/3] overflow-hidden bg-gray-50 hover:border-luxury-gold transition-colors snap-start block">
+                                    <img src="{{ Storage::url($thumb->image_url) }}" alt="Thumb" class="absolute inset-0 w-full h-full object-cover mix-blend-darken">
                                 </button>
                             @endforeach
                         </div>
                     @endif
                 </div>
-
                 <!-- Right Column: Product Info -->
                 <div class="w-full md:w-1/2 flex flex-col">
                     <span class="text-xs text-gray-500 uppercase tracking-widest mb-2 font-medium">{{ $product->brand->name ?? 'Exclusive' }}</span>
@@ -237,41 +235,46 @@
             <!-- 4. Related Products -->
             @if($relatedProducts->count() > 0)
                 <section aria-labelledby="related-heading">
-                    <div class="flex justify-between items-end mb-8">
+                    <div class="flex justify-between items-end mb-8">  
                         <div>
-                            <h2 id="related-heading" class="font-serif text-2xl md:text-3xl text-luxury-dark mb-4">Sản Phẩm Tương Tự</h2>
+                            <h2 id="related-heading" class="font-serif text-2xl md:text-3xl text-luxury-dark mb-4">Sản Phẩm Tương Tự</h2>     
                             <div class="w-12 h-0.5 bg-luxury-gold"></div>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-10 sm:gap-x-8">
                         @foreach($relatedProducts as $related)
                             <div class="group relative bg-white flex flex-col h-full hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-                                <!-- Image Container 1:1 -->
-                                <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-100 relative">
-                                    <a href="{{ route('products.show', $related->slug) }}">
-                                        @if($related->image)
-                                            <img src="{{ Storage::url($related->image) }}" alt="{{ $related->name }}" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700">
-                                        @else
-                                            <div class="w-full h-full flex items-center justify-center text-gray-400 font-serif">View Details</div>
-                                        @endif
-                                    </a>
+                                <!-- Image Container 4:3 -->
+                                <div class="relative w-full aspect-[4/3] overflow-hidden bg-gray-50 block">
+                                    <a href="{{ route('products.show', $related->slug) }}" class="absolute inset-0 z-10 w-full h-full"></a>
+                                    @if($related->image)
+                                        <img src="{{ Storage::url($related->image) }}" alt="{{ $related->name }}" class="absolute inset-0 w-full h-full object-cover mix-blend-darken group-hover:scale-105 transition-transform duration-700 z-0">
+                                    @else
+                                        <div class="absolute inset-0 w-full h-full flex items-center justify-center text-gray-400 font-serif z-0">View Details</div>
+                                    @endif
                                     
                                     <!-- Stock Badge -->
                                     @if($related->stock > 0)
-                                        <span class="absolute top-3 right-3 bg-white text-luxury-dark text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-10 shadow-sm">Còn hàng</span>
+                                        <span class="absolute top-3 right-3 bg-white text-luxury-dark text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-20 shadow-sm pointer-events-none">Còn hàng</span>
                                     @else
-                                        <span class="absolute top-3 right-3 bg-gray-200 text-gray-600 text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-10 shadow-sm">Hết hàng</span>
+                                        <span class="absolute top-3 right-3 bg-gray-200 text-gray-600 text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-20 shadow-sm pointer-events-none">Hết hàng</span>
                                     @endif
+
+                                    <!-- Quick Actions Base -->
+                                    <div class="absolute inset-x-0 bottom-0 bg-white bg-opacity-95 opacity-0 translate-y-[10px] group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out flex flex-col z-30 shadow-md border-t border-gray-100">
+                                        <a href="{{ route('products.show', $related->slug) }}" class="relative z-30 flex-1 py-3 text-center text-xs font-semibold text-luxury-dark uppercase tracking-wider hover:bg-gray-50 hover:text-luxury-gold transition-colors block border-b border-gray-100">
+                                            Quick View
+                                        </a>
+                                    </div>
                                 </div>
                                 
                                 <!-- Product Details -->
-                                <div class="p-4 flex-grow flex flex-col text-center">
+                                <div class="p-4 flex-grow flex flex-col text-center border-t border-gray-50">
                                     <span class="text-xs text-gray-500 uppercase tracking-widest mb-2 font-medium">{{ $related->brand->name ?? 'Exclusive' }}</span>
                                     <h3 class="font-serif text-lg text-luxury-dark mb-2 line-clamp-2">
                                         <a href="{{ route('products.show', $related->slug) }}" class="hover:text-luxury-gold transition-colors">{{ $related->name }}</a>
                                     </h3>
-                                    <div class="mt-auto pt-2">
+                                    <div class="mt-auto pt-4 flex flex-col items-center justify-center">
                                         <span class="text-sm font-semibold text-luxury-dark">{{ number_format($related->price, 0, ',', '.') }} ₫</span>
                                     </div>
                                 </div>
@@ -280,7 +283,16 @@
                     </div>
                 </section>
             @endif
-
         </div>
     </div>
+    
+    <style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </x-customer>

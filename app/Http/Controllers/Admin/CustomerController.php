@@ -10,7 +10,7 @@ class CustomerController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::where('role', 'user');
+        $query = User::query();
 
         if ($request->has('search') && $request->search) {
             $searchTerm = $request->search;
@@ -27,11 +27,6 @@ class CustomerController extends Controller
 
     public function show(User $customer)
     {
-        // Ensure we only show customers
-        if ($customer->role !== 'user') {
-            abort(404);
-        }
-
         $customer->load(['orders' => function ($query) {
             $query->latest()->take(5);
         }]);
@@ -39,11 +34,25 @@ class CustomerController extends Controller
         return view('admin.customers.show', compact('customer'));
     }
 
+    public function changeRole(Request $request, User $customer)
+    {
+        if (auth()->id() === $customer->id) {
+            return back()->with('error', 'You cannot change your own role.');
+        }
+
+        $request->validate([
+            'role' => 'required|in:user,admin'
+        ]);
+
+        $customer->update(['role' => $request->role]);
+
+        return back()->with('success', 'User role updated successfully.');
+    }
+
     public function toggleStatus(User $customer)
     {
-        // Prevent toggling admins
-        if ($customer->role !== 'user') {
-            return back()->with('error', 'Cannot modify admin status.');
+        if (auth()->id() === $customer->id) {
+            return back()->with('error', 'You cannot modify your own status.');
         }
 
         $customer->update(['status' => !$customer->status]);

@@ -86,7 +86,7 @@
                             #{{ $index + 1 }}
                         </div>
 
-                        <div class="relative w-full aspect-w-4 aspect-h-5 overflow-hidden bg-gray-50">
+                        <div class="relative w-full aspect-[4/3] overflow-hidden bg-gray-50">
                             <a href="#">
                                 @if($product->image)
                                     <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover mix-blend-darken group-hover:scale-105 transition-transform duration-700">
@@ -129,7 +129,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @foreach($newestProducts as $product)
                         <div class="bg-white/5 border border-white/10 group flex flex-col text-center hover:bg-white/10 transition-colors duration-300">
-                            <div class="relative w-full aspect-w-1 aspect-h-1 overflow-hidden p-6 bg-white/5">
+                            <div class="relative w-full aspect-[4/3] overflow-hidden p-6 bg-white/5">
                                 <a href="#" class="block w-full h-full relative">
                                     @if($product->image)
                                         <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700 drop-shadow-lg">
@@ -167,7 +167,7 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
                 @foreach($mostViewedProducts as $product)
                     <div class="bg-white border border-gray-100 hover:border-luxury-gold hover:shadow-lg transition-all duration-300 group flex flex-col">
-                        <div class="relative w-full aspect-w-1 aspect-h-1 overflow-hidden bg-gray-50 p-4">
+                        <div class="relative w-full aspect-[4/3] overflow-hidden bg-gray-50 p-4">
                             <a href="#">
                                 @if($product->image)
                                     <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-contain mix-blend-darken group-hover:scale-105 transition-transform duration-500">

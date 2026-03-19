@@ -54,7 +54,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', ProductController::class);
 
     // Banners
-    Route::post('banners/{banner}/toggle', [BannerController::class, 'toggle'])->name('banners.toggle');
+    Route::patch('banners/{banner}/toggle', [BannerController::class, 'toggle'])->name('banners.toggle');
     Route::resource('banners', BannerController::class);
 
     // Orders
@@ -66,6 +66,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
     Route::get('customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
     Route::patch('customers/{customer}/toggle-status', [CustomerController::class, 'toggleStatus'])->name('customers.toggle-status');
+    Route::patch('customers/{customer}/change-role', [CustomerController::class, 'changeRole'])->name('customers.change-role');
 });
 
 require __DIR__.'/auth.php';

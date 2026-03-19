@@ -125,28 +125,32 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-10 sm:gap-x-8">
                     @foreach($featuredProducts as $product)
                         <div class="group relative bg-white flex flex-col h-full hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-                            <!-- Image Container 1:1 -->
-                            <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-100 relative">
-                                <a href="{{ route('products.show', $product->slug) }}">
-                                    @if($product->image)
-                                        <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700">
-                                    @else
-                                        <div class="w-full h-full flex items-center justify-center text-gray-400 font-serif">View Details</div>
-                                    @endif
-                                </a>
+                            <!-- Image Container 3:4 -->
+                            <div class="relative w-full aspect-[3/4] overflow-hidden bg-gray-50 flex items-center justify-center">
+                                <a href="{{ route('products.show', $product->slug) }}" class="absolute inset-0 z-10 w-full h-full"></a>
+                                @if($product->image)
+                                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-contain mix-blend-darken group-hover:scale-105 transition-transform duration-700 p-4 relative z-0">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-gray-400 font-serif relative z-0">View Details</div>
+                                @endif
                                 
                                 <!-- Stock Badge -->
                                 @if($product->stock > 0)
-                                    <span class="absolute top-3 right-3 bg-white text-luxury-dark text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-10 shadow-sm">In Stock</span>
+                                    <span class="absolute top-3 right-3 bg-white text-luxury-dark text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-20 shadow-sm pointer-events-none">In Stock</span>
                                 @else
-                                    <span class="absolute top-3 right-3 bg-gray-200 text-gray-600 text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-10 shadow-sm">Out of Stock</span>
+                                    <span class="absolute top-3 right-3 bg-gray-200 text-gray-600 text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-20 shadow-sm pointer-events-none">Out of Stock</span>
                                 @endif
                                 
-                                
+                                <!-- Quick Actions Base -->
+                                <div class="absolute inset-x-0 bottom-0 bg-white bg-opacity-95 opacity-0 translate-y-[10px] group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out flex flex-col z-30 shadow-md border-t border-gray-100">
+                                    <a href="{{ route('products.show', $product->slug) }}" class="relative z-30 flex-1 py-3 text-center text-xs font-semibold text-luxury-dark uppercase tracking-wider hover:bg-gray-50 hover:text-luxury-gold transition-colors block border-b border-gray-100">
+                                        Quick View
+                                    </a>
+                                </div>
                             </div>
                             
                             <!-- Product Details -->
-                            <div class="p-4 flex-grow flex flex-col text-center">
+                            <div class="p-4 flex-grow flex flex-col text-center border-t border-gray-50">
                                 <span class="text-xs text-gray-500 uppercase tracking-widest mb-2 font-medium">{{ $product->brand->name ?? 'Exclusive' }}</span>
                                 <h3 class="font-serif text-lg text-luxury-dark mb-2 line-clamp-2">
                                     <a href="{{ route('products.show', $product->slug) }}" class="hover:text-luxury-gold transition-colors">{{ $product->name }}</a>

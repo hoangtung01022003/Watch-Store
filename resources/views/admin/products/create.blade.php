@@ -169,7 +169,7 @@
 
                         <div>
                             <input type="file" id="gallery" name="gallery[]" accept="image/jpeg,image/png,image/jpg,image/webp" multiple @change="handleFileChange" x-ref="fileInput" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 border border-gray-300 rounded-lg p-1.5 focus:ring-gray-500 focus:border-gray-500">
-                            <p class="mt-1 text-xs text-gray-500">You can upload multiple additional images.</p>
+                            <p class="mt-1 text-xs text-gray-500">Upload multiple additional images.</p>
                         </div>
 
                         @error('gallery.*') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
@@ -230,7 +230,7 @@
                         if (!isDuplicate) {
                             this.files.push(file);
                             this.previewImages.push({
-                                url: URL.createObjectURL(file),
+                                url: URL.createObjectURL(file), // Generate object URL for preview
                                 file: file
                             });
                         }
@@ -249,7 +249,10 @@
                 updateFileInput() {
                     const dataTransfer = new DataTransfer();
                     this.files.forEach(file => dataTransfer.items.add(file));
-                    this.$refs.fileInput.files = dataTransfer.files;
+                    // Check if fileInput exists before attempting to write to avoid loops/errors
+                    if(this.$refs.fileInput) {
+                        this.$refs.fileInput.files = dataTransfer.files;
+                    }
                 }
             }));
         }

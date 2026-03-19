@@ -71,16 +71,9 @@
                             @endif
                             <form action="{{ route('admin.products.toggle', $product->id) }}" method="POST" class="inline-block m-0 p-0">
                                 @csrf
-                                <button type="submit" class="focus:outline-none">
-                                    @if($product->is_active)
-                                        <span class="inline-flex flex-row items-center px-2 py-1 rounded-full text-[10px] font-medium bg-green-100 text-green-800 whitespace-nowrap hover:bg-green-200 transition-colors cursor-pointer" title="Click to disable">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                        </span>
-                                    @else
-                                        <span class="inline-flex flex-row items-center px-2 py-1 rounded-full text-[10px] font-medium bg-gray-100 text-gray-800 whitespace-nowrap hover:bg-gray-200 transition-colors cursor-pointer" title="Click to enable">
-                                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                        </span>
-                                    @endif
+                                <button type="submit" class="focus:outline-none relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 {{ $product->status ? 'bg-indigo-600' : 'bg-gray-200' }}" title="{{ $product->status ? 'Click to disable' : 'Click to enable' }}">
+                                    <span class="sr-only">Toggle status</span>
+                                    <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform {{ $product->status ? 'translate-x-6' : 'translate-x-1' }}"></span>
                                 </button>
                             </form>
                             @if($product->trashed())

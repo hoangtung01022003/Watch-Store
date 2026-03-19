@@ -41,6 +41,7 @@
                     <th class="px-6 py-4 font-semibold">Name</th>
                     <th class="px-6 py-4 font-semibold">Email & Phone</th>
                     <th class="px-6 py-4 font-semibold">Registered</th>
+                    <th class="px-6 py-4 font-semibold text-center">Role</th>
                     <th class="px-6 py-4 font-semibold text-center">Status</th>
                     <th class="px-6 py-4 font-semibold text-right">Actions</th>
                 </tr>
@@ -61,6 +62,17 @@
                         {{ $customer->created_at->format('M d, Y') }}
                     </td>
                     <td class="px-6 py-4 text-center">
+                        @if($customer->role === 'admin')
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                Admin
+                            </span>
+                        @else
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                User
+                            </span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4 text-center">
                         @if($customer->status)
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                 Active
@@ -73,6 +85,16 @@
                     </td>
                     <td class="px-6 py-4 text-right">
                         <div class="flex items-center justify-end gap-3">
+                            @if(auth()->id() !== $customer->id)
+                            <form action="{{ route('admin.customers.change-role', $customer) }}" method="POST" class="inline-block" onsubmit="return confirm('Change role to {{ $customer->role === 'admin' ? 'user' : 'admin' }}?');">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="role" value="{{ $customer->role === 'admin' ? 'user' : 'admin' }}">
+                                <button type="submit" class="text-sm font-medium text-blue-600 hover:text-blue-900">
+                                    Make {{ $customer->role === 'admin' ? 'User' : 'Admin' }}
+                                </button>
+                            </form>
+                            
                             <form action="{{ route('admin.customers.toggle-status', $customer) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to {{ $customer->status ? 'block' : 'unblock' }} this customer?');">
                                 @csrf
                                 @method('PATCH')
@@ -80,14 +102,16 @@
                                     {{ $customer->status ? 'Lock' : 'Unlock' }}
                                 </button>
                             </form>
-                            
+                            @else
+                            <span class="text-sm text-gray-400 italic">It's You</span>
+                            @endif
                             <a href="{{ route('admin.customers.show', $customer) }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">View</a>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-6 py-10 text-center text-gray-500">
+                    <td colspan="6" class="px-6 py-10 text-center text-gray-500">
                         No customers found matching your criteria.
                     </td>
                 </tr>
