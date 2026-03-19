@@ -45,5 +45,10 @@ class DatabaseSeeder extends Seeder
                 'product_id' => $product->id,
             ]);
         }
+
+        // Call SettingSeeder
+        $this->call([
+            SettingSeeder::class,
+        ]);
     }
 }

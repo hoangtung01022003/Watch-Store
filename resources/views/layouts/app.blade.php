@@ -49,5 +49,8 @@
             &copy; {{ date('Y') }} WatchStore. Premium Collection.
         </div>
     </div>
+
+    <!-- Floating Social Buttons -->
+    <x-social-floating />
 </body>
 </html>

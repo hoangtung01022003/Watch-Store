@@ -199,5 +199,7 @@
                 </div>
             </footer>
         </div>
+
+        <x-social-floating />
     </body>
 </html>

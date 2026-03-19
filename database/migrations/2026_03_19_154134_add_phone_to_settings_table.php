@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_images', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('settings', function (Blueprint $table) {
+            $table->string('phone')->nullable()->after('zalo_url');
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_images');
+        Schema::table('settings', function (Blueprint $table) {
+            $table->dropColumn('phone');
+        });
     }
 };
