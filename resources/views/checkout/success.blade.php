@@ -20,7 +20,7 @@
             </div>
 
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="{{ route('profile.edit') }}" class="px-8 py-4 border border-luxury-dark text-luxury-dark uppercase tracking-widest text-sm hover:bg-luxury-dark hover:text-white transition-colors duration-300">
+                <a href="{{ route('orders.index') }}" class="px-8 py-4 border border-luxury-dark text-luxury-dark uppercase tracking-widest text-sm hover:bg-luxury-dark hover:text-white transition-colors duration-300">
                     View My Orders
                 </a>
                 <a href="{{ route('products.index') }}" class="px-8 py-4 bg-luxury-dark text-white uppercase tracking-widest text-sm hover:bg-luxury-gold transition-colors duration-300">
