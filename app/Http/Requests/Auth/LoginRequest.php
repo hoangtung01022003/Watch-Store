@@ -50,6 +50,14 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        if (! Auth::user()->status) {
+            Auth::logout();
+            
+            throw ValidationException::withMessages([
+                'email' => 'Your account has been locked.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

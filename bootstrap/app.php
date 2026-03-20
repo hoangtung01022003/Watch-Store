@@ -12,7 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'admin' => \App\Http\Middleware\IsAdmin::class,
+            'check.status' => \App\Http\Middleware\CheckUserStatus::class,
+            'force.logout' => \App\Http\Middleware\ForceLogoutIfLocked::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
