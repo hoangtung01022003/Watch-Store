@@ -40,7 +40,7 @@
             <div class="divide-y divide-gray-100">
                 @foreach($order->items as $item)
                 <div class="flex items-center p-6 gap-4">
-                    <img src="{{ $item->product->images->first()->image_path ?? asset('images/placeholder.jpg') }}" alt="{{ $item->product->name }}" class="w-16 h-16 object-cover rounded-lg border border-gray-100">
+                    <img src="{{ $item->product->image ? Storage::url($item->product->image) : asset('images/placeholder.jpg') }}" alt="{{ $item->product->name }}" class="w-16 h-16 object-cover rounded-lg border border-gray-100">
                     <div class="flex-1">
                         <h4 class="font-medium text-gray-900">{{ $item->product->name }}</h4>
                         <div class="text-sm text-gray-500 mt-1">Số lượng: {{ $item->quantity }}</div>
