@@ -4,7 +4,7 @@
         <div class="bg-white border-b border-gray-100 py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="font-serif text-3xl text-luxury-dark tracking-tight">
-                    {{ __('Profile') }}
+                    {{ __('Hồ sơ cá nhân') }}
                 </h2>
                 <div class="w-12 h-0.5 bg-luxury-gold mt-4"></div>
             </div>
@@ -20,16 +20,16 @@
                         <button @click="tab = 'personal'" 
                                 :class="tab === 'personal' ? 'border-luxury-gold text-luxury-gold' : 'border-transparent text-gray-500 hover:text-luxury-dark hover:border-gray-300'"
                                 class="whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-xs uppercase tracking-widest transition-colors">
-                            Personal Info
+                            Thông tin cá nhân
                         </button>
                         <button @click="tab = 'password'" 
                                 :class="tab === 'password' ? 'border-luxury-gold text-luxury-gold' : 'border-transparent text-gray-500 hover:text-luxury-dark hover:border-gray-300'"
                                 class="whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-xs uppercase tracking-widest transition-colors">
-                            Change Password
+                            Đổi mật khẩu
                         </button>
                         <button @click="window.location.href='{{ route('profile.addresses.index') }}'"
                                 class="border-transparent text-gray-500 hover:text-luxury-dark hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-xs uppercase tracking-widest transition-colors">
-                            Address Book
+                            Sổ địa chỉ
                         </button>
                     </nav>
                 </div>

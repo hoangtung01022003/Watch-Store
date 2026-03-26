@@ -1,18 +1,18 @@
 @extends('layouts.admin')
 
-@section('header', 'Edit Category')
+@section('header', 'Sửa Danh Mục')
 
 @section('content')
 <div class="mb-6">
     <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
-        <a href="{{ route('admin.dashboard') }}" class="hover:text-indigo-600 transition-colors">Dashboard</a>
+        <a href="{{ route('admin.dashboard') }}" class="hover:text-indigo-600 transition-colors">Bảng điều khiển</a>
         <span>/</span>
-        <a href="{{ route('admin.categories.index') }}" class="hover:text-indigo-600 transition-colors">Categories</a>
+        <a href="{{ route('admin.categories.index') }}" class="hover:text-indigo-600 transition-colors">Danh mục</a>
         <span>/</span>
-        <span class="text-gray-900 font-medium">Edit</span>
+        <span class="text-gray-900 font-medium">Sửa</span>
     </div>
-    <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Edit Category: {{ $category->name }}</h2>
-    <p class="text-sm text-gray-500 mt-1">Update product category information.</p>
+    <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Sửa Danh Mục: {{ $category->name }}</h2>
+    <p class="text-sm text-gray-500 mt-1">Cập nhật thông tin danh mục sản phẩm.</p>
 </div>
 
 <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden max-w-3xl">
@@ -21,13 +21,13 @@
         
         <div class="space-y-6">
             <div>
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Category Name <span class="text-red-500">*</span></label>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Tên danh mục <span class="text-red-500">*</span></label>
                 <input type="text" id="name" name="name" value="{{ old('name', $category->name) }}" class="block w-full border border-gray-300 rounded-lg p-2.5 text-sm text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition-colors" required>
                 @error('name') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
             </div>
 
             <div>
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>
                 <textarea id="description" name="description" rows="4" class="block w-full border border-gray-300 rounded-lg p-2.5 text-sm text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">{{ old('description', $category->description) }}</textarea>
                 @error('description') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
             </div>
@@ -35,10 +35,10 @@
 
         <div class="mt-8 pt-5 border-t border-gray-200 flex items-center justify-end gap-3">
             <a href="{{ route('admin.categories.index') }}" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                Cancel
+                Hủy
             </a>
             <button type="submit" class="px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm transition-colors">
-                Save Changes
+                Lưu Thay Đổi
             </button>
         </div>
     </form>

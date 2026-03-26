@@ -16,7 +16,7 @@
             <!-- Sidebar -->
             <aside class="flex flex-col w-64 text-white bg-gray-800 transition-all duration-300">
                 <div class="flex items-center justify-center h-16 bg-gray-900">
-                    <span class="text-xl font-bold uppercase">Admin Panel</span>
+                    <span class="text-xl font-bold uppercase">Bảng điều khiển</span>
                 </div>
                 
                 <div class="overflow-y-auto overflow-x-hidden flex-grow">
@@ -26,7 +26,7 @@
                                 <span class="inline-flex justify-center items-center ml-4">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                                 </span>
-                                <span class="ml-2 text-sm tracking-wide truncate">Dashboard</span>
+                                <span class="ml-2 text-sm tracking-wide truncate">Tổng quan</span>
                             </a>
                         </li>
                         <li>
@@ -34,7 +34,7 @@
                                 <span class="inline-flex justify-center items-center ml-4">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
                                 </span>
-                                <span class="ml-2 text-sm tracking-wide truncate">Categories</span>
+                                <span class="ml-2 text-sm tracking-wide truncate">Danh mục</span>
                             </a>
                         </li>
                         <li>
@@ -42,7 +42,7 @@
                                 <span class="inline-flex justify-center items-center ml-4">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
                                 </span>
-                                <span class="ml-2 text-sm tracking-wide truncate">Brands</span>
+                                <span class="ml-2 text-sm tracking-wide truncate">Thương hiệu</span>
                             </a>
                         </li>
                         <!-- Add more nav items here -->

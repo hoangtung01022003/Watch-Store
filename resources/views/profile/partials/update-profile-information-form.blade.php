@@ -1,11 +1,11 @@
 <section>
     <header>
         <h2 class="text-2xl font-serif text-luxury-dark">
-            {{ __('Profile Information') }}
+            {{ __('Thông tin hồ sơ') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-500">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Cập nhật thông tin hồ sơ tài khoản và địa chỉ email của bạn.") }}
         </p>
     </header>
 
@@ -18,13 +18,13 @@
         @method('patch')
 
         <div>
-            <label for="name" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ __('Name') }}</label>
+            <label for="name" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ __('Tên') }}</label>
             <input id="name" name="name" type="text" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name" class="mt-2 block w-full px-4 py-3 border border-gray-300 bg-white text-sm placeholder-gray-400 focus:outline-none focus:border-luxury-gold focus:ring-1 focus:ring-luxury-gold transition-colors" />
             @error('name')<p class="mt-1 flex items-center text-xs text-red-500">{{ $message }}</p>@enderror
         </div>
 
         <div>
-            <label for="phone" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ __('Phone') }}</label>
+            <label for="phone" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ __('Số điện thoại') }}</label>
             <input id="phone" name="phone" type="text" value="{{ old('phone', $user->phone) }}" autocomplete="tel" class="mt-2 block w-full px-4 py-3 border border-gray-300 bg-white text-sm placeholder-gray-400 focus:outline-none focus:border-luxury-gold focus:ring-1 focus:ring-luxury-gold transition-colors" />
             @error('phone')<p class="mt-1 flex items-center text-xs text-red-500">{{ $message }}</p>@enderror
         </div>
@@ -36,36 +36,34 @@
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
-                    <p class="text-sm mt-3 text-gray-600">
-                        {{ __('Your email address is unverified.') }}
+                    <p class="text-sm mt-2 text-gray-800">
+                        {{ __('Địa chỉ email của bạn chưa được xác minh.') }}
 
-                        <button form="send-verification" class="text-sm text-luxury-gold hover:text-luxury-dark underline tracking-wider transition-colors ml-1">
-                            {{ __('Click here to re-send the verification email.') }}
+                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-luxury-gold">
+                            {{ __('Bấm vào đây để gửi lại email xác minh.') }}
                         </button>
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 text-sm text-green-600 bg-green-50 p-3 border border-green-200">
-                            {{ __('A new verification link has been sent to your email address.') }}
+                        <p class="mt-2 font-medium text-sm text-green-600">
+                            {{ __('Một liên kết xác minh mới vừa được gửi tới địa chỉ email của bạn.') }}
                         </p>
                     @endif
                 </div>
             @endif
         </div>
 
-        <div class="flex items-center gap-4 pt-4">
-            <button type="submit" class="inline-flex justify-center py-3 px-8 border border-transparent shadow-sm text-sm font-medium text-white bg-luxury-dark hover:bg-luxury-gold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-luxury-gold transition-all uppercase tracking-widest">
-                {{ __('Save Changes') }}
-            </button>
+        <div class="flex items-center gap-4">
+            <button type="submit" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-3 bg-luxury-dark text-white text-sm font-semibold uppercase tracking-wider hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-luxury-dark transition-colors">{{ __('Lưu') }}</button>
 
             @if (session('status') === 'profile-updated')
                 <p
                     x-data="{ show: true }"
                     x-show="show"
                     x-transition
-                    x-init="setTimeout(() => show = false, 3000)"
-                    class="text-sm text-green-600 font-medium"
-                >{{ __('Saved successfully.') }}</p>
+                    x-init="setTimeout(() => show = false, 2000)"
+                    class="text-sm text-gray-600"
+                >{{ __('Đã lưu.') }}</p>
             @endif
         </div>
     </form>

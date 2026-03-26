@@ -30,7 +30,7 @@
         <div>
             <a href="/">
                 <h1 class="text-4xl font-serif font-bold text-luxury-dark tracking-tight cursor-pointer hover:text-luxury-gold transition-colors duration-300">
-                    WatchStore
+                    Xuân Giang Store
                 </h1>
             </a>
         </div>

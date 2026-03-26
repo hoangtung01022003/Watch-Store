@@ -54,7 +54,7 @@
                                         <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-white mb-4 leading-tight">{{ $banner->title }}</h2>
                                         @if($banner->link_url)
                                             <a href="{{ $banner->link_url }}" class="inline-block mt-6 px-8 py-3 bg-white text-luxury-dark font-medium tracking-wide uppercase text-sm hover:bg-luxury-gold hover:text-white transition-colors duration-300">
-                                                Shop Now
+                                                Mua Ngay
                                             </a>
                                         @endif
                                     </div>
@@ -77,7 +77,7 @@
                 @endif
             @else
                 <div class="w-full h-full bg-slate-900 flex items-center justify-center text-white">
-                    <h2 class="font-serif text-4xl">Timeless Elegance</h2>
+                    <h2 class="font-serif text-4xl">Sự Thanh Lịch Vượt Thời Gian</h2>
                 </div>
             @endif
         </section>
@@ -87,7 +87,7 @@
             <!-- 3. Category Grid Section -->
             <section aria-labelledby="category-heading">
                 <div class="flex flex-col items-center mb-10 text-center">
-                    <h2 id="category-heading" class="font-serif text-3xl md:text-4xl text-luxury-dark mb-4">Shop by Category</h2>
+                    <h2 id="category-heading" class="font-serif text-3xl md:text-4xl text-luxury-dark mb-4">Mua sắm theo danh mục</h2>
                     <div class="w-12 h-0.5 bg-luxury-gold"></div>
                 </div>
 
@@ -102,7 +102,7 @@
                             <div class="absolute bottom-0 left-0 right-0 p-6 flex items-end">
                                 <div>
                                     <h3 class="font-serif text-2xl text-white mb-1 group-hover:-translate-y-1 transition-transform duration-300">{{ $category->name }}</h3>
-                                    <p class="text-gray-300 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 group-hover:-translate-y-1 transition-all duration-300">{{ $category->description ?? 'Explore our distinctive collection.' }}</p>
+                                    <p class="text-gray-300 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 group-hover:-translate-y-1 transition-all duration-300">{{ $category->description ?? 'Khám phá bộ sưu tập độc đáo của chúng tôi.' }}</p>
                                 </div>
                             </div>
                         </a>
@@ -114,11 +114,11 @@
             <section aria-labelledby="featured-heading">
                 <div class="flex justify-between items-end mb-10">
                     <div>
-                        <h2 id="featured-heading" class="font-serif text-3xl md:text-4xl text-luxury-dark mb-4">Featured Watches</h2>
+                        <h2 id="featured-heading" class="font-serif text-3xl md:text-4xl text-luxury-dark mb-4">Đồng Hồ Nổi Bật</h2>
                         <div class="w-12 h-0.5 bg-luxury-gold"></div>
                     </div>
                     <a href="{{ route('products.index') }}" class="text-sm font-semibold text-luxury-dark hover:text-luxury-gold transition-colors tracking-widest uppercase flex items-center gap-2">
-                        View Collection <span aria-hidden="true">&rarr;</span>
+                        Xem Bộ Sưu Tập <span aria-hidden="true">&rarr;</span>
                     </a>
                 </div>
 
@@ -131,34 +131,34 @@
                                 @if($product->image)
                                     <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-contain mix-blend-darken group-hover:scale-105 transition-transform duration-700 p-4 relative z-0">
                                 @else
-                                    <div class="w-full h-full flex items-center justify-center text-gray-400 font-serif relative z-0">View Details</div>
+                                    <div class="w-full h-full flex items-center justify-center text-gray-400 font-serif relative z-0">Xem Chi Tiết</div>
                                 @endif
                                 
                                 <!-- Stock Badge -->
                                 @if($product->stock > 0)
-                                    <span class="absolute top-3 right-3 bg-white text-luxury-dark text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-20 shadow-sm pointer-events-none">In Stock</span>
+                                    <span class="absolute top-3 right-3 bg-white text-luxury-dark text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-20 shadow-sm pointer-events-none">Còn Hàng</span>
                                 @else
-                                    <span class="absolute top-3 right-3 bg-gray-200 text-gray-600 text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-20 shadow-sm pointer-events-none">Out of Stock</span>
+                                    <span class="absolute top-3 right-3 bg-gray-200 text-gray-600 text-[10px] font-bold tracking-wider px-2 py-1 uppercase z-20 shadow-sm pointer-events-none">Hết Hàng</span>
                                 @endif
                                 
                                 <!-- Quick Actions Base -->
                                 <div class="absolute inset-x-0 bottom-0 bg-white bg-opacity-95 opacity-0 translate-y-[10px] group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out flex flex-col z-30 shadow-md border-t border-gray-100">
                                     <a href="{{ route('products.show', $product->slug) }}" class="relative z-30 flex-1 py-3 text-center text-xs font-semibold text-luxury-dark uppercase tracking-wider hover:bg-gray-50 hover:text-luxury-gold transition-colors block border-b border-gray-100">
-                                        Quick View
+                                        Xem Nhanh
                                     </a>
                                 </div>
                             </div>
                             
                             <!-- Product Details -->
                             <div class="p-4 flex-grow flex flex-col text-center border-t border-gray-50">
-                                <span class="text-xs text-gray-500 uppercase tracking-widest mb-2 font-medium">{{ $product->brand->name ?? 'Exclusive' }}</span>
+                                <span class="text-xs text-gray-500 uppercase tracking-widest mb-2 font-medium">{{ $product->brand->name ?? 'Độc Quyền' }}</span>
                                 <h3 class="font-serif text-lg text-luxury-dark mb-2 line-clamp-2">
                                     <a href="{{ route('products.show', $product->slug) }}" class="hover:text-luxury-gold transition-colors">{{ $product->name }}</a>
                                 </h3>
                                 <div class="mt-auto pt-4 flex flex-col items-center justify-center">
                                     <span class="text-sm font-semibold text-luxury-dark mb-4">{{ number_format($product->price, 0, ',', '.') }} ₫</span>
                                     @if($product->stock > 0)
-                                    <button class="text-xs uppercase tracking-widest font-semibold border-b border-gray-300 pb-1 hover:text-luxury-gold hover:border-luxury-gold transition-colors" title="Add to cart"
+                                    <button class="text-xs uppercase tracking-widest font-semibold border-b border-gray-300 pb-1 hover:text-luxury-gold hover:border-luxury-gold transition-colors" title="Thêm vào giỏ"
                                             onclick="
                                                 event.preventDefault();
                                                 fetch('{{ route('cart.add') }}', {
@@ -193,11 +193,11 @@
                                                 });
                                             "
                                     >
-                                        Add to Cart
+                                        Thêm vào giỏ
                                     </button>
                                     @else
                                     <button class="text-xs uppercase tracking-widest font-semibold border-b border-gray-300 pb-1 text-gray-400 cursor-not-allowed" disabled>
-                                        Out of Stock
+                                        Hết Hàng
                                     </button>
                                     @endif
                                 </div>
@@ -208,16 +208,16 @@
                 
                 <div class="mt-12 text-center sm:hidden">
                     <a href="{{ route('products.index') }}" class="inline-block border border-luxury-dark px-8 py-3 text-luxury-dark hover:bg-luxury-dark hover:text-white transition-colors uppercase tracking-widest text-xs font-semibold">
-                        View Collection
+                        Xem Bộ Sưu Tập
                     </a>
                 </div>
             </section>
 
             <!-- 5. Brand Showcase Strip -->
             <section aria-labelledby="brands-heading" class="border-y border-gray-200 py-12">
-                <h2 id="brands-heading" class="sr-only">Our Brands</h2>
+                <h2 id="brands-heading" class="sr-only">Thương hiệu của chúng tôi</h2>
                 <div class="text-center mb-8">
-                    <span class="text-xs text-gray-400 uppercase tracking-[0.2em]">Official Retailer For</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-[0.2em]">Đại Lý Chính Thức Cho</span>
                 </div>
                 <div class="flex overflow-x-auto pb-4 sm:pb-0 hide-scrollbar space-x-8 md:space-x-12 items-center justify-center opacity-70">
                     @foreach($brands as $brand)
@@ -240,19 +240,19 @@
                 <div class="absolute inset-0 bg-gradient-to-t from-luxury-dark via-transparent to-transparent"></div>
                 <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white z-10">
                     <span class="block text-luxury-gold text-sm tracking-[0.2em] uppercase mb-4">{{ $promoBanner->title }}</span>
-                    <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl mb-8 leading-tight max-w-3xl mx-auto">Discover the Art of Horology.</h2>
+                    <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl mb-8 leading-tight max-w-3xl mx-auto">Khám Phá Nghệ Thuật Chế Tác Đồng Hồ.</h2>
                     @if($promoBanner->link_url)
                         <a href="{{ $promoBanner->link_url }}" class="inline-block bg-luxury-gold text-white px-10 py-4 font-medium tracking-widest uppercase hover:bg-white hover:text-luxury-dark transition-all duration-300 shadow-xl">
-                            Explore Now
+                            Khám Phá Ngay
                         </a>
                     @endif
                 </div>
             @else
                 <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white z-10">
-                    <span class="block text-luxury-gold text-sm tracking-[0.2em] uppercase mb-4">Limited Edition</span>
-                    <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl mb-8 leading-tight max-w-3xl mx-auto">A Legacy of Precision.</h2>
+                    <span class="block text-luxury-gold text-sm tracking-[0.2em] uppercase mb-4">Phiên Bản Giới Hạn</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl mb-8 leading-tight max-w-3xl mx-auto">Di Sản Của Sự Chính Xác.</h2>
                     <a href="{{ route('products.index') }}" class="inline-block bg-luxury-gold text-white px-10 py-4 font-medium tracking-widest uppercase hover:bg-white hover:text-luxury-dark transition-all duration-300">
-                        View All Collections
+                        Xem Tất Cả Bộ Sưu Tập
                     </a>
                 </div>
             @endif

@@ -1,20 +1,20 @@
 @extends('layouts.admin')
 
-@section('header', 'Products')
+@section('header', 'Sản Phẩm')
 
 @section('content')
 <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <div>
-        <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Products</h2>
-        <p class="text-sm text-gray-500 mt-1">Manage your catalog, stock, and pricing.</p>
+        <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Sản Phẩm</h2>
+        <p class="text-sm text-gray-500 mt-1">Quản lý danh mục, tồn kho và giá cả.</p>
     </div>
     <div class="flex items-center gap-3">
         <a href="{{ route('admin.products.index', ['trashed' => request('trashed') ? null : '1']) }}" class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 shadow-sm transition-colors">
-            {{ request('trashed') ? 'Show Active' : 'Show Trashed' }}
+            {{ request('trashed') ? 'Hiển thị hoạt động' : 'Hiển thị đã xóa' }}
         </a>
         <a href="{{ route('admin.products.create') }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm transition-colors">
             <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-            Add Product
+            Thêm Sản Phẩm
         </a>
     </div>
 </div>
@@ -24,13 +24,13 @@
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-gray-50 text-gray-700 text-sm border-b border-gray-200">
-                    <th class="px-6 py-4 font-semibold w-24">Image</th>
-                    <th class="px-6 py-4 font-semibold">Name</th>
-                    <th class="px-6 py-4 font-semibold text-center">Category/Brand</th>
-                    <th class="px-6 py-4 font-semibold text-right">Price</th>
-                    <th class="px-6 py-4 font-semibold text-center">Stock</th>
-                    <th class="px-6 py-4 font-semibold text-center">Status</th>
-                    <th class="px-6 py-4 font-semibold text-right">Actions</th>
+                    <th class="px-6 py-4 font-semibold w-24">Hình Ảnh</th>
+                    <th class="px-6 py-4 font-semibold">Tên</th>
+                    <th class="px-6 py-4 font-semibold text-center">Danh Mục/Thương Hiệu</th>
+                    <th class="px-6 py-4 font-semibold text-right">Giá</th>
+                    <th class="px-6 py-4 font-semibold text-center">Tồn Kho</th>
+                    <th class="px-6 py-4 font-semibold text-center">Trạng Thái</th>
+                    <th class="px-6 py-4 font-semibold text-right">Hành Động</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 text-sm">
@@ -54,7 +54,7 @@
                         <div class="text-xs text-gray-500 mt-0.5">{{ $product->brand->name ?? 'N/A' }}</div>
                     </td>
                     <td class="px-6 py-4 text-right">
-                        <div class="font-semibold text-gray-900 whitespace-nowrap">${{ number_format($product->price, 0, '.', ',') }}</div>
+                        <div class="font-semibold text-gray-900 whitespace-nowrap">{{ number_format($product->price, 0, ',', '.') }} VNĐ</div>
                     </td>
                     <td class="px-6 py-4 text-center">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $product->stock > 10 ? 'bg-green-100 text-green-800' : ($product->stock > 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
@@ -66,41 +66,41 @@
                             @if($product->is_featured)
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-800 whitespace-nowrap">
                                     <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                    Featured
+                                    Nổi bật
                                 </span>
                             @endif
                             <form action="{{ route('admin.products.toggle', $product->id) }}" method="POST" class="inline-block m-0 p-0">
                                 @csrf
-                                <button type="submit" class="focus:outline-none relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 {{ $product->status ? 'bg-indigo-600' : 'bg-gray-200' }}" title="{{ $product->status ? 'Click to disable' : 'Click to enable' }}">
-                                    <span class="sr-only">Toggle status</span>
+                                <button type="submit" class="focus:outline-none relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 {{ $product->status ? 'bg-indigo-600' : 'bg-gray-200' }}" title="{{ $product->status ? 'Nhấp để tắt' : 'Nhấp để bật' }}">
+                                    <span class="sr-only">Chuyển đổi trạng thái</span>
                                     <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform {{ $product->status ? 'translate-x-6' : 'translate-x-1' }}"></span>
                                 </button>
                             </form>
                             @if($product->trashed())
                                 <span class="inline-flex flex-row items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-red-100 text-red-800 whitespace-nowrap">
-                                    <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5"></span> Trashed
+                                    <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5"></span> Đã xóa
                                 </span>
                             @endif
                         </div>
                     </td>
                     <td class="px-6 py-4 text-right">
                         <div class="flex items-center justify-end gap-2">
-                            <a href="{{ route('admin.products.edit', $product->id) }}" class="p-2 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors tooltip-trigger" title="Edit">
+                            <a href="{{ route('admin.products.edit', $product->id) }}" class="p-2 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors tooltip-trigger" title="Sửa">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                             </a>
                             
                             @if($product->trashed())
                                 <form action="{{ route('admin.products.restore', $product->id) }}" method="POST" class="inline-block">
                                     @csrf
-                                    <button type="submit" class="p-2 text-green-600 bg-green-50 hover:bg-green-100 rounded-lg transition-colors tooltip-trigger" title="Restore">
+                                    <button type="submit" class="p-2 text-green-600 bg-green-50 hover:bg-green-100 rounded-lg transition-colors tooltip-trigger" title="Khôi phục">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
                                     </button>
                                 </form>
                             @else
-                                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to move this product to trash?');">
+                                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn chuyển sản phẩm này vào thùng rác không?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors tooltip-trigger" title="Delete">
+                                    <button type="submit" class="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors tooltip-trigger" title="Xóa">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                 </form>
@@ -113,9 +113,9 @@
                     <td colspan="7" class="px-6 py-10 text-center text-gray-500">
                         <div class="flex flex-col items-center">
                             <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                            <p class="text-base font-medium text-gray-900 mb-1">No products found</p>
-                            <p class="text-sm text-gray-500 mb-4">Get started by creating a new product.</p>
-                            <a href="{{ route('admin.products.create') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800">Add your first product</a>
+                            <p class="text-base font-medium text-gray-900 mb-1">Không tìm thấy sản phẩm nào</p>
+                            <p class="text-sm text-gray-500 mb-4">Bắt đầu bằng cách tạo một sản phẩm mới.</p>
+                            <a href="{{ route('admin.products.create') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800">Thêm sản phẩm đầu tiên của bạn</a>
                         </div>
                     </td>
                 </tr>
